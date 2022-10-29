@@ -1,3 +1,4 @@
+import csv
 class Item:
     #Class Attributes
     discount = 20
@@ -16,6 +17,25 @@ class Item:
         #Adding Objects info of The Class To the List All
         Item.all.append(self)
 
+    # A Class Method To Instatiate Objects From Reading  CSV File
+    @classmethod
+    def create_objects_from_csv(cls):
+        with open("items.csv","r") as file:
+            data = csv.DictReader(file)
+            items = list(data)
+            for item in items:# Iterarting Over The List which Gotten From The reader at Line
+                #Important Here InItating objects of the Class Student Using The same as
+                '''
+                stu1 = Item("phone",10, 20)
+                Just difference is  We are Passing the parameter From The Data We Have Gotten From the CSV 
+                And Looping Through The All The row
+                '''
+                Item(name=item.get("name"),
+                     price=float(item.get("price")),
+                     quantity=int(item.get("quantity")))
+
+
+
     def calculate_total_item_value(self):
         x = self.price * self.quantity
         print(f"Total Value For the product '{self.name}' is {x} USD For The Quantity '{self.quantity}' And Price Per Piece is '{self.price}' \n")
@@ -25,20 +45,14 @@ class Item:
     def __repr__(self):
         return f"Item('{self.name}','{self.price}','{self.quantity}')"#refers to line 40 - 44
 
-#initiating a object of class Item
-item1 = Item("Phone", 200,10)
-item2 = Item("Airpod",100,50)
-item3 = Item("Charger",50,100)
-item4 = Item("Cable",20,200)
-item5 = Item("Converter",10,250)
-#without Changing Default Discount Rate
-print(item1.discounted_price())
-#After Setting New Discount Rate to the Item2
-item2.discount = 30
-print(item2.discounted_price())
-
-#Displaying all the Objects Of The Class Which Has Been Created
-
-print('\n')
-
+#initiating  object of class Item from a file
+Item.create_objects_from_csv()
+#Cheking The Items froM Class Attribute All Which Contash All the Object That Has Been
 print(Item.all)
+#We Can loop Through The List All And Access The Object Attribute Too For Example Se below
+print("\n")
+list_Of_items = Item.all
+for i in list_Of_items:
+    print(i.name)#Accesing object Attribute
+    print(i.price)#Accesing object Attribute 
+    print("\n")
